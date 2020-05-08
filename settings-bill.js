@@ -45,7 +45,9 @@ function billWithSettings() {
     }
     //USING SET VALUES 
     function makeCall() {
-        callCostTotal += theCallCost
+        if(!hasReachedCriticalLevel()){
+            callCostTotal += theCallCost
+        }
     }
 
     function getTotalCost() {
@@ -61,7 +63,22 @@ function billWithSettings() {
     }
 
     function sendSms() {
-        smsCostTotal += theSmsCost
+        if (!hasReachedCriticalLevel()) {
+            smsCostTotal += theSmsCost
+        }
+    }
+
+    function hasReachedCriticalLevel() {
+        return getTotalCost() >= getCriticalLevel()
+    }
+
+    function totalClassName() {
+        if (hasReachedCriticalLevel()) {
+            return "critical"
+        }
+        if (getTotalCost() >= getWarningLevel()) {
+            return "warning"
+        }
     }
     return {
         //SETTING VALUES
@@ -78,6 +95,8 @@ function billWithSettings() {
         getTotalCost,
         getTotalCallCost,
         getTotalSmsCost,
-        sendSms
+        sendSms,
+        //USING/SETTING WARNING LEVELS
+        totalClassName
     }
 }
